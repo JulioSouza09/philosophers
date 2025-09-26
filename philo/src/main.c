@@ -6,7 +6,7 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 17:45:34 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/09/26 13:03:18 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:10:57 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,24 @@ int	main(int argc, char **argv)
 		return (put_usage_error(argv[0]));
 	int			i;
 	int			j;
-	int			ids[philosophers->rules.n_philosophers];
+	int			k;
 	pthread_t	*philos;
+	t_philosopher	ph[2];
 
+	k = 0;
+	while (k < 2)
+	{
+		ph[k].id = k;
+		++k;
+	}
 	philos = ft_calloc(philosophers->rules.n_philosophers, sizeof(pthread_t));
 
 	i = 0;
 	printf("%d\n", philosophers->rules.n_philosophers);
 	while (i < philosophers->rules.n_philosophers)
 	{
-		ids[i] = i;
 		printf("Creating thread %d, i = %d\n", i, i);
-		if (pthread_create(&philos[i], NULL, thread_monitor, &ids[i]) != 0)
+		if (pthread_create(&philos[i], NULL, thread_monitor, &ph[i]) != 0)
 			printf("Thread creation failed!\n");	
 		++i;
 	}

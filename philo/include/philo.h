@@ -6,14 +6,12 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 17:43:29 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/09/26 13:05:57 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 15:41:32 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-#include <bits/pthreadtypes.h>
-#include <stddef.h>
 # define TRUE 1
 # define FALSE 0
 
@@ -31,10 +29,6 @@ typedef struct s_philosopher
 	int	time_alive;
 	int	time_eating;
 	int	time_sleeping;
-	long		last_meal;
-	pthread_t	*monitor;
-	pthread_mutex_t	personal_lock;
-
 }	t_philosopher;
 
 typedef struct s_rules
@@ -44,8 +38,6 @@ typedef struct s_rules
 	int	time_to_sleep;
 	int	n_philosophers;
 	int	n_times_must_eat;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	print_lock;
 }	t_rules;
 
 typedef struct s_program
