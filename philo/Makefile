@@ -6,7 +6,7 @@
 #    By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/17 17:35:17 by jcesar-s          #+#    #+#              #
-#    Updated: 2025/09/26 13:03:52 by jcesar-s         ###   ########.fr        #
+#    Updated: 2025/09/28 15:08:06 by jcesar-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ CFLAGS = -Wall -Wextra -Werror -g -pthread
 IDIR = include/
 ODIR = obj/
 SDIR = src/
-SRCFILES = main.c error_handler.c utils_parser.c utils.c philosophers_init.c thread_routine.c
+SRCFILES = main.c error_handler.c utils_parser.c utils.c philosophers_init.c \
+		   thread_routine.c thread_init.c
 SRC = $(patsubst %, $(SDIR)%, $(SRCFILES))
 OBJ = $(patsubst %.c, $(ODIR)%.o, $(SRCFILES))
 DEP = $(IDIR)philo.h

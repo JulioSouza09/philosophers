@@ -6,7 +6,7 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 19:08:03 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/09/24 19:19:54 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/09/28 21:11:17 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	ft_putstr_fd(char *str, int fd)
 {
-
 	if (!str)
 		return (ft_putstr_fd("(null)", fd));
 	while (*str != '\0')
