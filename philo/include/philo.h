@@ -14,7 +14,6 @@
 # define PHILO_H
 # define TRUE 1
 # define FALSE 0
-# define ALLOC_FAILURE -1
 
 # include <pthread.h>
 # include <stdio.h>
@@ -23,68 +22,57 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_philosopher
+typedef unsigned long long	t_timestamp;
+
+typedef struct s_philo
 {
-	int	alive;
-	int	id;
-	int	fork_left;
-	int	fork_right;
-	int	time_alive;
-	int	time_eating;
-	int	time_sleeping;
-}	t_philosopher;
+	int				id;
+	int				meals_count;
+	t_timestamp		last_meal;	
+	t_timestamp		last_sleep;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	struct s_table	*table;
+}	t_philo;
 
 typedef struct s_rules
 {
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	n_philosophers;
-	int	n_times_must_eat;
+	t_timestamp	time_to_die;
+	t_timestamp	time_to_eat;
+	t_timestamp	time_to_sleep;
+	int			minimum_meals;
 }	t_rules;
 
-typedef struct s_locks
+typedef struct s_table
 {
-	pthread_mutex_t	*fork_lock;
-	pthread_mutex_t	print_lock;
-}	t_locks;
-
-typedef struct s_threads
-{
-	t_philosopher	*philos;
-	pthread_t		*threads;
-}	t_threads;
-
-typedef struct s_program
-{
-	t_threads		all;
+	int				philos_count;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
 	t_rules			rules;
-	t_locks			locks;
-	t_philosopher	philosopher;
-}	t_program;
+}	t_table;
 
-/***** Error handler *****/
+void	*ft_calloc(size_t nmemb, size_t size);
+int		ft_strlen(char *str);
+int		ft_error(char *message);
+
+/*
 void		ft_putstr_fd(char *str, int fd);
 int			put_usage_error(char *program_path);
 
-/***** Parser utils *****/
 int			ft_atoi(const char *nptr);
 int			is_digit(char c);
 int			is_number(char *str);
 int			is_all_numbers(int argc, char **argv);
 
-/***** Parser utils *****/
 void		*ft_calloc(size_t nmemb, size_t size);
 
-/***** Philosophers init *****/
 t_program	*philosophers_init(int argc, char **argv);
 void		philosophers_destroy(t_program *philosophers);
 
-/***** Thread routine *****/
 void		*thread_monitor(void *arg);
 
-/***** Thread init *****/
 int			thread_create(t_program *program, t_program *copy);
 int			thread_join(t_program *program);
+*/
 
 #endif

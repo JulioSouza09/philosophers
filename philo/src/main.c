@@ -10,16 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 int	main(int argc, char **argv)
 {
-	t_program	*program;
-
 	if (argc < 5 || argc > 6)
-		return (put_usage_error(argv[0]));
-	program = philosophers_init(argc, argv);
-	if (!program)
-		return (put_usage_error(argv[0]));
+		return (ft_error("Invalid arguments"));
 	return (0);
 }

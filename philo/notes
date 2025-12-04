@@ -1,0 +1,272 @@
+There will be a main loop representing the life cycle
+Every thread will execute it
+
+input:
+number_of_philosophers; (and forks)
+time_to_die (in milliseconds): If a philosopher has not started eating within time_to_die milliseconds since the start of their last meal or the start of the simulation, they die.
+time_to_eat (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
+time_to_sleep (in milliseconds): The time a philosopher will spend sleeping.
+number_of_times_each_philosopher_must_eat (optional argument): If all
+philosophers have eaten at least number_of_times_each_philosopher_must_eat
+times, the simulation stops. If not specified, the simulation stops when a
+philosopher dies.
+
+output:
+timestamp_in_ms X has taken a fork
+timestamp_in_ms X is eating
+timestamp_in_ms X is sleeping
+timestamp_in_ms X is thinking
+timestamp_in_ms X died
+
+typedef struct s_philo {
+	int 	id;
+	int		meals_count;
+	long	last_meal;	
+	long	last_sleep;
+	pthread_mutex_t *right_fork;
+	pthread_mutex_t *left_fork;
+	t_table *table;
+} t_philo;
+
+typedef struct s_rules {
+	long time_to_die;
+	long time_to_eat;
+	long time_to_sleep;
+	int	 minimum_meals;
+} t_rules;
+
+typedef struct s_table {
+	int		philos_count;
+	t_philo *philos;
+	pthread_mutex_t *forks;
+	t_rules rules;
+} t_table;
+
+need to store:
+timestamp;
+Philosopher_id;
+left_fork;
+right_fork;
+time_to_die;
+start_last_meal;
+time_to_eat; (hold two forks)
+time_to_sleep; (if it wakes up and has no forks, it will think)
+time_started_sleep;
+meals_count;
+number_of_times_each_philosopher_must_eat; (optional argument: all philosophers eat at least meals_count times)
+
+!! Time stamp differences when starting actions
+
+fe 1 fa 2 fb 3 fc 4 fd 5
+
+1 -> fa fe
+2 -> fa (wait)
+3 -> fc fb
+4 -> fc (wait)
+5 -> fe (wait)
+
+void	take_forks(philosopher_data) {
+	if (philosopher_id % 2 == 0) {
+		lock(left_fork);
+		print_state(philosopher_data);
+		lock(right_fork);
+		print_state(philosopher_data);
+	}
+	else {
+		lock(right_fork);
+		print_state(philosopher_data);
+		lock(left_fork);
+		print_state(philosopher_data);
+	}
+}
+
+void put_down_forks(philosopher_data) {
+	if (philosopher_id % 2 == 0) {
+		unlock(left_fork);
+		unlock(right_fork);
+	}
+	else {
+		unlock(right_fork);
+		unlock(left_fork);
+	}
+}
+
+void *monitor() {
+	int i;
+	while (TRUE) {
+		i = 0;
+		while (i < philos_count) {
+			if (time_of_day - philo[i]->last_meal > time_to_die) {
+				printf("%d %d died", time_of_day, philo->id);
+				return (NULL);
+			}
+		}
+	}
+	return (NULL);
+}
+
+void *life_cycle(philo) {
+	while (is_dead(philo->table) != NULL) {
+	
+		// eat
+		take_forks()
+		timestamp = gettimeofday_microseconds(struct_time); // return time in microseconds
+		printf("%d %d is eating\n", timestamp, philosopher_id);
+		usleep(time_to_eat);
+		put_down_forks();
+	
+		// sleep
+		timestamp = gettimeofday_microseconds(struct_time);
+		printf("%d %d is sleeping\n", timestamp, philosopher_id);
+		usleep(time_to_sleep);
+	
+		// think
+		timestamp = gettimeofday_microseconds(struct_time);
+		if (timestamp > time_started_sleep + time_to_sleep) {
+			timestamp = gettimeofday_microseconds(struct_time);
+			printf("%d %d is thinking\n", timestamp, philosopher_id);
+		}
+	}
+}
+
+typedef struct s_philo {
+	int 	id;
+	int		meals_count;
+	long	last_meal;	
+	long	last_sleep;
+	pthread_mutex_t *right_fork;
+	pthread_mutex_t *left_fork;
+	t_table *table;
+} t_philo;
+
+typedef struct s_rules {
+	long time_to_die;
+	long time_to_eat;
+	long time_to_sleep;
+	int	 minimum_meals;
+} t_rules;
+
+typedef struct s_table {
+	int		philos_count;
+	t_philo *philos;
+	pthread_mutex_t *forks;
+	t_rules rules;
+} t_table;
+
+flow:
+
+int	ft_error(char *message) {
+	int message_len;
+
+	message_len = ft_strlen(message);
+	write(2, "Error: ", 7);
+	write(2, message, message_len);
+	return (EXIT_FAILURE);
+}
+
+t_table *create_table(int arg_count, char **args) {
+	t_table	*table;
+
+	table = calloc(1, sizeof(t_table));
+	if (table == NULL)
+		return (NULL);
+	table->philos_count = ft_atoi(args[1]);
+	if (create_forks(&table->forks, table->philos_count) == 0) {
+		clean_table(table);
+		return (NULL);
+	}
+	if (create_philos(table) == 0) {
+		clean_table(table);
+		return (NULL);
+	}
+	create_rules(&table->rules, args);
+	return (table);
+}
+
+void	clean_table(t_table *table) {
+	int i;
+	
+	if (table == NULL)
+		return ;
+	if (table->forks != NULL) {
+		i = 0;
+		while (i < table->philos_count)
+			pthread_mutex_destroy(&table->forks[i++]);
+		free(table->forks);
+	}
+	if (table->philos != NULL)
+		free(table->philos);
+	free(table);
+}
+
+int	start_meal(t_table *table, pthread_t **threads) {
+	int i;
+
+	*threads = calloc(table->philos_count + 1, sizeof(pthread_t));
+	if (*threads == NULL)
+		return (EXIT_FAILURE);
+	i = 0;
+	while (i < table->philos_count) {	
+		if (pthread_create(&(*threads)[i], NULL, meal_cycle, &table->philos[i]) != 0) {
+			finish_meal(*threads, i);
+			free(*threads);
+			return (EXIT_FAILURE);
+		}
+		++i;
+	}
+	if (pthread_create(&(*threads)[i], NULL, monitor, table)) != 0 {
+		finish_meal(*threads, i);
+		free(*threads)
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	finish_meal(pthread_t *threads, int size) {
+	int i;
+
+	i = 0;
+	while (i < size) {
+		if (pthread_join(threads[i], NULL) != 0) {
+			free(threads)
+			return (EXIT_FAILURE);
+		}
+		++i;
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	main(int argc, char **argv) {
+	t_table *table;
+	pthread_t *threads;
+
+	// check args
+	if (argc < 5 || argc > 6)
+		return (ft_error("Invalid arguments"));
+
+	// initialize global struct
+	table = create_table(argc, argv);
+	if (table == NULL)
+		return (ft_error("Could not allocate memory"));
+
+	// initialize threads and start lifecycle
+	threads = NULL;
+	if (start_meal(table, &threads) != EXIT_SUCCESS) {
+		clean_table(table);
+		return (ft_error("Failed initializing threads"));
+	}
+
+	// wait for threads
+	if (finish_meal(threads, table->philos_count + 1) != EXIT_SUCCESS) {
+		free(threads);
+		clean_table(table);
+		return (ft_error("Failed joining threads"));
+	}
+	free(threads);
+
+	// free all heap memory
+	clean_table(table);
+
+	// exit success
+	return (EXIT_SUCCESS);
+}

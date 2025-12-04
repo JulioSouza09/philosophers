@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -21,4 +21,24 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		return (NULL);
 	memset(allocated_ptr, 0, size * nmemb);
 	return (allocated_ptr);
+}
+
+int	ft_strlen(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len] != '\0')
+		++len;
+	return (len);
+}
+
+int	ft_error(char *message)
+{
+	int	message_len;
+
+	message_len = ft_strlen(message);
+	write(2, "Error: ", 7);
+	write(2, message, message_len);
+	return (1);
 }
