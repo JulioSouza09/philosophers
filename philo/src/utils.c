@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+#include <limits.h>
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -23,7 +24,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (allocated_ptr);
 }
 
-int	ft_strlen(char *str)
+int	ft_strlen(const char *str)
 {
 	int	len;
 
@@ -33,12 +34,54 @@ int	ft_strlen(char *str)
 	return (len);
 }
 
-int	ft_error(char *message)
+int	is_valid_number(char *str)
+{
+	while ((*str >= 9 && *str <= 13) || *str == 32)
+		++str;
+	if (*str == '-')
+		return (FALSE);
+	if (*str == '+')
+		++str;
+	if (*str == '\0')
+		return (FALSE);
+	while (*str != '\0')
+	{
+		if (*str < '0' || *str > '9')
+			return (FALSE);
+		++str;
+	}
+	return (TRUE);
+}
+
+int	ft_atoi_safe(const char *nptr, int *result)
+{
+	long	number;
+
+	number = 0;
+	while ((*nptr >= 9 && *nptr <= 13) || *nptr == 32)
+		++nptr;
+	if (*nptr == '+')
+		++nptr;
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		number = number * 10 + (*nptr - '0');
+		if (number > INT_MAX)
+			return (EXIT_FAILURE);
+		++nptr;
+	}
+	if (number == 0)
+		return (EXIT_FAILURE);
+	*result = (int) number;
+	return (EXIT_SUCCESS);
+}
+
+int	ft_error(const char *message)
 {
 	int	message_len;
 
 	message_len = ft_strlen(message);
 	write(2, "Error: ", 7);
 	write(2, message, message_len);
+	write(2, "\n", 1);
 	return (1);
 }

@@ -16,8 +16,10 @@ CFLAGS = -Wall -Wextra -Werror -g -pthread
 IDIR = include/
 ODIR = obj/
 SDIR = src/
-SRCFILES = main.c error_handler.c utils_parser.c utils.c philosophers_init.c \
-		   thread_routine.c thread_init.c
+SRCFILES = main.c \
+		   utils.c \
+		   create_table.c \
+		   start_meal.c
 SRC = $(patsubst %, $(SDIR)%, $(SRCFILES))
 OBJ = $(patsubst %.c, $(ODIR)%.o, $(SRCFILES))
 DEP = $(IDIR)philo.h

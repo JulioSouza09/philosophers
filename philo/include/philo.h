@@ -37,23 +37,33 @@ typedef struct s_philo
 
 typedef struct s_rules
 {
-	t_timestamp	time_to_die;
-	t_timestamp	time_to_eat;
-	t_timestamp	time_to_sleep;
-	int			minimum_meals;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	minimum_meals;
 }	t_rules;
 
 typedef struct s_table
 {
 	int				philos_count;
+	int				stop_meal;
 	t_philo			*philos;
+	pthread_t		*threads;
 	pthread_mutex_t	*forks;
 	t_rules			rules;
 }	t_table;
 
 void	*ft_calloc(size_t nmemb, size_t size);
-int		ft_strlen(char *str);
-int		ft_error(char *message);
+int		ft_strlen(const char *str);
+int		ft_error(const char *message);
+int		ft_atoi_safe(const char *nptr, int *result);
+int		is_valid_number(char *str);
+
+t_table	*create_table(int arg_count, char **argv);
+void	clean_table(t_table *table);
+
+int		start_meal(t_table *table);
+int		finish_meal(pthread_t *threads, int size);
 
 /*
 void		ft_putstr_fd(char *str, int fd);
