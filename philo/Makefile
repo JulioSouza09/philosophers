@@ -19,7 +19,9 @@ SDIR = src/
 SRCFILES = main.c \
 		   utils.c \
 		   create_table.c \
-		   start_meal.c
+		   start_meal.c \
+		   philo_eat.c \
+		   philo_sleep.c
 SRC = $(patsubst %, $(SDIR)%, $(SRCFILES))
 OBJ = $(patsubst %.c, $(ODIR)%.o, $(SRCFILES))
 DEP = $(IDIR)philo.h

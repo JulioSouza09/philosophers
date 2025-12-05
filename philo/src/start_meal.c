@@ -1,7 +1,20 @@
 #include "../include/philo.h"
 #include <pthread.h>
 
-void	*meal_cycle(void *arg);
+void	*meal_cycle(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *) arg;
+	while (philo->table->stop_meal == TRUE)
+	{
+		philo_eat(philo);
+		philo_sleep(philo);
+		philo_think(philo);
+	}
+	return (NULL);
+}
+
 void	*monitor(void *arg);
 
 int	start_meal(t_table *table)

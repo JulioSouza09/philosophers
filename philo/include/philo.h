@@ -22,6 +22,13 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+enum	e_update
+{
+	UPDATE_LAST_MEAL,
+	UPDATE_LAST_SLEEP,
+	DONT_UPDATE
+};
+
 typedef unsigned long long	t_timestamp;
 
 typedef struct s_philo
@@ -64,6 +71,12 @@ void	clean_table(t_table *table);
 
 int		start_meal(t_table *table);
 int		finish_meal(pthread_t *threads, int size);
+
+int		philo_eat(t_philo *philo);
+int		philo_sleep(t_philo *philo);
+int		philo_think(t_philo *philo);
+int		print_state(int philo_id, char *action, int update);
+long	get_timestamp(void);
 
 /*
 void		ft_putstr_fd(char *str, int fd);
