@@ -17,19 +17,20 @@ void	*meal_cycle(void *arg)
 
 void	*monitor(void *arg)
 {
-	t_table	*table;
-	int		i;
-
-	table = (t_table *) arg;
-	while (TRUE)
-	{
-		i = 0;
-		while (table->philos[i].last_meal < table->philos_count)
-		{
-			if (table->philos[i].last_meal)
-				return (NULL);
-		}
-	}
+//	t_table	*table;
+//	int		i;
+//
+//	table = (t_table *) arg;
+//	while (TRUE)
+//	{
+//		i = 0;
+//		while (table->philos[i].last_meal < table->philos_count)
+//		{
+//			if (table->philos[i].last_meal)
+//				return (NULL);
+//		}
+//	}
+	(void)arg;
 	return (NULL);
 }
 

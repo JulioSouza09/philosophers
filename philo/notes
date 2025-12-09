@@ -57,7 +57,7 @@ number_of_times_each_philosopher_must_eat; (optional argument: all philosophers 
 
 !! Time stamp differences when starting actions
 
-fe 1 fa 2 fb 3 fc 4 fd 5
+fd 1 fa 2 fb 3 fc 4 fd 
 
 1 -> fa fe
 2 -> fa (wait)

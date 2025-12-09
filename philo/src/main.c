@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h>
 
 int	main(int argc, char **argv)
 {

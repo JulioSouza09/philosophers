@@ -12,7 +12,7 @@
 
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread
+CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=address
 IDIR = include/
 ODIR = obj/
 SDIR = src/
