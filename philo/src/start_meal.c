@@ -6,7 +6,7 @@ void	*meal_cycle(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	while (philo->table->stop_meal == TRUE)
+	while (TRUE)
 	{
 		philo_eat(philo);
 		philo_sleep(philo);
@@ -15,7 +15,23 @@ void	*meal_cycle(void *arg)
 	return (NULL);
 }
 
-void	*monitor(void *arg);
+void	*monitor(void *arg)
+{
+	t_table	*table;
+	int		i;
+
+	table = (t_table *) arg;
+	while (TRUE)
+	{
+		i = 0;
+		while (table->philos[i].last_meal < table->philos_count)
+		{
+			if (table->philos[i].last_meal)
+				return (NULL);
+		}
+	}
+	return (NULL);
+}
 
 int	start_meal(t_table *table)
 {
@@ -26,6 +42,7 @@ int	start_meal(t_table *table)
 	th = table->threads;
 	ph = table->philos;
 	i = 0;
+	table->start_time = get_timestamp();
 	while (i < table->philos_count)
 	{
 		if (pthread_create(&th[i], NULL, meal_cycle, &ph[i]) != 0)

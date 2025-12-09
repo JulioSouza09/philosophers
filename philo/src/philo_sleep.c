@@ -2,13 +2,11 @@
 
 int		philo_sleep(t_philo *philo);
 int		philo_think(t_philo *philo);
-int		print_state(int philo_id, char *action, int update);
-long	get_timestamp(void);
 
 int	philo_sleep(t_philo *philo)
 {
-	print_state(philo->id, "sleeping", UPDATE_LAST_SLEEP);
-	usleep(philo->table->rules.time_to_sleep);
+	print_state(philo, philo->id, "is sleeping", UPDATE_LAST_SLEEP);
+	usleep(philo->table->rules.time_to_sleep * 1000);
 	return (EXIT_SUCCESS);
 }
 
@@ -20,8 +18,8 @@ int	philo_think(t_philo *philo)
 
 	time_to_sleep = philo->table->rules.time_to_sleep;
 	last_sleep = philo->last_sleep;
-	timestamp = get_timestamp();
+	timestamp = get_timestamp() - philo->table->start_time;
 	if (timestamp > last_sleep + time_to_sleep)
-		print_state(philo->id, "thinking", DONT_UPDATE);
+		print_state(philo, philo->id, "is thinking", DONT_UPDATE);
 	return (EXIT_SUCCESS);
 }

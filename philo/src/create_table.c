@@ -1,4 +1,5 @@
 #include "../include/philo.h"
+#include <pthread.h>
 
 int	create_forks(pthread_mutex_t **forks, int size)
 {
@@ -84,6 +85,16 @@ t_table	*create_table(int arg_count, char **args)
 	if (create_philos(table) != 0)
 		return (clean_table(table), NULL);
 	if (create_rules(&table->rules, arg_count, args) != 0)
+		return (clean_table(table), NULL);
+	table->print_lock = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (table->print_lock == NULL)
+		return (clean_table(table), NULL);
+	if (pthread_mutex_init(table->print_lock, NULL) != 0)
+		return (clean_table(table), NULL);
+	table->state_lock = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (table->state_lock == NULL)
+		return (clean_table(table), NULL);
+	if (pthread_mutex_init(table->print_lock, NULL) != 0)
 		return (clean_table(table), NULL);
 	table->stop_meal = FALSE;
 	return (table);

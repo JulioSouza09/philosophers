@@ -21,7 +21,8 @@ SRCFILES = main.c \
 		   create_table.c \
 		   start_meal.c \
 		   philo_eat.c \
-		   philo_sleep.c
+		   philo_sleep.c \
+		   meal_utils.c
 SRC = $(patsubst %, $(SDIR)%, $(SRCFILES))
 OBJ = $(patsubst %.c, $(ODIR)%.o, $(SRCFILES))
 DEP = $(IDIR)philo.h

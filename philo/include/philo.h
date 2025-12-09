@@ -54,9 +54,12 @@ typedef struct s_table
 {
 	int				philos_count;
 	int				stop_meal;
+	long			start_time;
 	t_philo			*philos;
 	pthread_t		*threads;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*print_lock;
+	pthread_mutex_t	*state_lock;
 	t_rules			rules;
 }	t_table;
 
@@ -75,7 +78,7 @@ int		finish_meal(pthread_t *threads, int size);
 int		philo_eat(t_philo *philo);
 int		philo_sleep(t_philo *philo);
 int		philo_think(t_philo *philo);
-int		print_state(int philo_id, char *action, int update);
+int		print_state(t_philo *philo, int philo_id, char *action, int update);
 long	get_timestamp(void);
 
 /*
