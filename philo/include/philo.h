@@ -35,6 +35,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				meals_count;
+	int				allowed_to_eat;
 	t_timestamp		last_meal;	
 	t_timestamp		last_sleep;
 	pthread_mutex_t	*right_fork;

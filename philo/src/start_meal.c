@@ -1,17 +1,24 @@
 #include "../include/philo.h"
-#include <pthread.h>
 
 void	*meal_cycle(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	if (philo->table->philos_count % 2 != 0)
-		usleep(philo->table->rules.time_to_eat / 2);
+//	if (philo->id % 2 != 0 && philo->table->philos_count % 2 != 0)
+//		usleep(1000);
+	if (philo->id % 2 == 0)
+		usleep(1000);
 	while (philo->table->stop_meal != TRUE)
 	{
+		if (philo->table->stop_meal == TRUE)
+			break ;
 		philo_eat(philo);
+		if (philo->table->stop_meal == TRUE)
+			break ;
 		philo_sleep(philo);
+		if (philo->table->stop_meal == TRUE)
+			break ;
 		philo_think(philo);
 	}
 	return (NULL);
@@ -19,8 +26,9 @@ void	*meal_cycle(void *arg)
 
 void	*monitor(void *arg)
 {
-	t_table	*table;
-	int		i;
+	t_table		*table;
+	t_timestamp	timestamp;
+	int			i;
 
 	table = (t_table *) arg;
 	while (TRUE)
@@ -28,10 +36,12 @@ void	*monitor(void *arg)
 		i = 0;
 		while (i < table->philos_count)
 		{
-			if (table->philos[i].last_meal - get_timestamp() > (t_timestamp) table->rules.time_to_die)
+			timestamp = get_timestamp() - table->start_time;
+			if (timestamp - table->philos[i].last_meal > (t_timestamp) table->rules.time_to_die)
 			{
 				print_state(&table->philos[i], table->philos[i].id, "has died", DONT_UPDATE);
 				table->stop_meal = TRUE;
+				return (NULL);
 			}
 			++i;
 		}

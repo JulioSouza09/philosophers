@@ -1,5 +1,6 @@
 #include "../include/philo.h"
 #include <pthread.h>
+#include <stdlib.h>
 
 int		take_forks(t_philo *philo);
 int		put_down_forks(t_philo *philo);
@@ -48,6 +49,10 @@ int	put_down_forks(t_philo *philo)
 
 int	philo_eat(t_philo *philo)
 {
+	//if (philo->allowed_to_eat == FALSE)
+	//	return (EXIT_FAILURE);
+	if (philo->table->stop_meal == TRUE)
+		return (EXIT_FAILURE);
 	if (take_forks(philo) != 0)
 		return (EXIT_FAILURE);
 	print_state(philo, philo->id, "is eating", UPDATE_LAST_MEAL);

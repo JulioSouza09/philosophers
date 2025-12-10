@@ -91,11 +91,11 @@ t_table	*create_table(int arg_count, char **args)
 		return (clean_table(table), NULL);
 	if (pthread_mutex_init(table->print_lock, NULL) != 0)
 		return (clean_table(table), NULL);
-	table->state_lock = ft_calloc(1, sizeof(pthread_mutex_t));
-	if (table->state_lock == NULL)
-		return (clean_table(table), NULL);
-	if (pthread_mutex_init(table->print_lock, NULL) != 0)
-		return (clean_table(table), NULL);
+//	table->state_lock = ft_calloc(1, sizeof(pthread_mutex_t));
+//	if (table->state_lock == NULL)
+//		return (clean_table(table), NULL);
+//	if (pthread_mutex_init(table->print_lock, NULL) != 0)
+//		return (clean_table(table), NULL);
 	table->stop_meal = FALSE;
 	return (table);
 }
@@ -117,5 +117,7 @@ void	clean_table(t_table *table)
 		free(table->philos);
 	if (table->threads != NULL)
 		free(table->threads);
+	if (table->print_lock != NULL)
+		free(table->print_lock);
 	free(table);
 }
