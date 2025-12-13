@@ -34,6 +34,7 @@ int	create_philos(t_table *table)
 		table->philos[i].left_fork = &table->forks[i];
 		table->philos[i].right_fork = &table->forks[(i + 1) % size];
 		table->philos[i].table = table;
+		table->philos[i].last_meal = table->start_time;
 		++i;
 	}
 	return (EXIT_SUCCESS);
@@ -77,6 +78,7 @@ t_table	*create_table(int arg_count, char **args)
 		return (clean_table(table), NULL);
 	if (ft_atoi_safe(args[1], &table->philos_count) != 0)
 		return (clean_table(table), NULL);
+	table->start_time = get_timestamp();
 	table->threads = ft_calloc(table->philos_count + 1, sizeof(pthread_t));
 	if (table->threads == NULL)
 		return (clean_table(table), NULL);
@@ -91,11 +93,11 @@ t_table	*create_table(int arg_count, char **args)
 		return (clean_table(table), NULL);
 	if (pthread_mutex_init(table->print_lock, NULL) != 0)
 		return (clean_table(table), NULL);
-//	table->state_lock = ft_calloc(1, sizeof(pthread_mutex_t));
-//	if (table->state_lock == NULL)
-//		return (clean_table(table), NULL);
-//	if (pthread_mutex_init(table->print_lock, NULL) != 0)
-//		return (clean_table(table), NULL);
+	table->state_lock = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (table->state_lock == NULL)
+		return (clean_table(table), NULL);
+	if (pthread_mutex_init(table->state_lock, NULL) != 0)
+		return (clean_table(table), NULL);
 	table->stop_meal = FALSE;
 	return (table);
 }
@@ -119,5 +121,7 @@ void	clean_table(t_table *table)
 		free(table->threads);
 	if (table->print_lock != NULL)
 		free(table->print_lock);
+	if (table->state_lock != NULL)
+		free(table->state_lock);
 	free(table);
 }

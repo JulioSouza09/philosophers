@@ -77,6 +77,8 @@ int		start_meal(t_table *table);
 int		finish_meal(pthread_t *threads, int size);
 
 int		philo_eat(t_philo *philo);
+int		take_forks(t_philo *philo);
+int		put_down_forks(t_philo *philo);
 int		philo_sleep(t_philo *philo);
 int		philo_think(t_philo *philo);
 int		print_state(t_philo *philo, int philo_id, char *action, int update);

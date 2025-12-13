@@ -30,20 +30,14 @@ int		take_forks(t_philo *philo)
 
 int	put_down_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
-	{
-		if (pthread_mutex_unlock(philo->left_fork) != 0)
-			return (EXIT_FAILURE);
-		if (pthread_mutex_unlock(philo->right_fork) != 0)
-			return (EXIT_FAILURE);
-	}
-	else
-	{
-		if (pthread_mutex_unlock(philo->right_fork) != 0)
-			return (EXIT_FAILURE);
-		if (pthread_mutex_unlock(philo->left_fork) != 0)
-			return (EXIT_FAILURE);
-	}
+	if (pthread_mutex_unlock(philo->left_fork) != 0)
+		return (EXIT_FAILURE);
+	if (pthread_mutex_unlock(philo->right_fork) != 0)
+		return (EXIT_FAILURE);
+	if (pthread_mutex_unlock(philo->right_fork) != 0)
+		return (EXIT_FAILURE);
+	if (pthread_mutex_unlock(philo->left_fork) != 0)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
