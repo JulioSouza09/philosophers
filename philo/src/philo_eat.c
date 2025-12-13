@@ -6,16 +6,13 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:14:59 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/12/13 16:21:48 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:48:52 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 #include <pthread.h>
 #include <stdlib.h>
-
-int		take_forks(t_philo *philo);
-int		put_down_forks(t_philo *philo);
 
 int	take_forks(t_philo *philo)
 {
