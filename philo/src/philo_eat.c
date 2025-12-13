@@ -6,7 +6,7 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:14:59 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/12/13 16:48:52 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/12/13 20:01:35 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,18 @@ int	put_down_forks(t_philo *philo)
 
 int	philo_eat(t_philo *philo)
 {
+	long	time;
+
+	time = philo->table->rules.time_to_eat;
 	take_forks(philo);
 	pthread_mutex_lock(philo->table->state_lock);
 	philo->last_meal = get_timestamp();
 	philo->meals_count++;
 	pthread_mutex_unlock(philo->table->state_lock);
 	safe_print(philo, philo->last_meal, "is eating");
-	usleep(philo->table->rules.time_to_eat * 1000);
+	if (philo->table->rules.time_to_die < time)
+		time = philo->table->rules.time_to_die;
+	usleep(time * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 	return (EXIT_SUCCESS);

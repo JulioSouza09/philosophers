@@ -6,7 +6,7 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:10:58 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/12/13 16:23:24 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/12/13 19:59:02 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,21 @@
 void	*meal_cycle(void *arg)
 {
 	t_philo	*philo;
+	long	time;
 
 	philo = (t_philo *) arg;
 	if (philo->table->philos_count == 1)
 		case_1_philo(philo);
 	if (philo->id % 2 == 0)
 		usleep(1000);
+	time = philo->table->rules.time_to_sleep;
 	while (is_dead(philo->table) != TRUE)
 	{
 		philo_eat(philo);
 		safe_print(philo, get_timestamp(), "is sleeping");
-		usleep(philo->table->rules.time_to_sleep * 1000);
+		if (philo->table->rules.time_to_die < time)
+			time = philo->table->rules.time_to_die;
+		usleep(time * 1000);
 		safe_print(philo, get_timestamp(), "is thinking");
 		if (philo->id % 2 != 0)
 			usleep(1000);
