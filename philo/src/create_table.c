@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_table.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/13 16:04:41 by jcesar-s          #+#    #+#             */
+/*   Updated: 2025/12/13 16:23:43 by jcesar-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 #include <pthread.h>
 
@@ -34,7 +46,6 @@ int	create_philos(t_table *table)
 		table->philos[i].left_fork = &table->forks[i];
 		table->philos[i].right_fork = &table->forks[(i + 1) % size];
 		table->philos[i].table = table;
-		table->philos[i].last_meal = table->start_time;
 		++i;
 	}
 	return (EXIT_SUCCESS);
@@ -74,29 +85,22 @@ t_table	*create_table(int arg_count, char **args)
 	table = ft_calloc(1, sizeof(t_table));
 	if (table == NULL)
 		return (NULL);
-	if (is_valid_number(args[1]) == FALSE)
+	if (is_valid_number(args[1]) == FALSE
+		|| ft_atoi_safe(args[1], &table->philos_count) != 0)
 		return (clean_table(table), NULL);
-	if (ft_atoi_safe(args[1], &table->philos_count) != 0)
-		return (clean_table(table), NULL);
-	table->start_time = get_timestamp();
 	table->threads = ft_calloc(table->philos_count + 1, sizeof(pthread_t));
-	if (table->threads == NULL)
-		return (clean_table(table), NULL);
-	if (create_forks(&table->forks, table->philos_count) != 0)
-		return (clean_table(table), NULL);
-	if (create_philos(table) != 0)
-		return (clean_table(table), NULL);
-	if (create_rules(&table->rules, arg_count, args) != 0)
+	if (table->threads == NULL
+		|| create_forks(&table->forks, table->philos_count) != 0
+		|| create_philos(table) != 0
+		|| create_rules(&table->rules, arg_count, args) != 0)
 		return (clean_table(table), NULL);
 	table->print_lock = ft_calloc(1, sizeof(pthread_mutex_t));
-	if (table->print_lock == NULL)
-		return (clean_table(table), NULL);
-	if (pthread_mutex_init(table->print_lock, NULL) != 0)
+	if (table->print_lock == NULL
+		|| pthread_mutex_init(table->print_lock, NULL) != 0)
 		return (clean_table(table), NULL);
 	table->state_lock = ft_calloc(1, sizeof(pthread_mutex_t));
-	if (table->state_lock == NULL)
-		return (clean_table(table), NULL);
-	if (pthread_mutex_init(table->state_lock, NULL) != 0)
+	if (table->state_lock == NULL
+		|| pthread_mutex_init(table->state_lock, NULL) != 0)
 		return (clean_table(table), NULL);
 	table->stop_meal = FALSE;
 	return (table);

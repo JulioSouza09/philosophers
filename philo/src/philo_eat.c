@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_eat.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/13 16:14:59 by jcesar-s          #+#    #+#             */
+/*   Updated: 2025/12/13 16:21:48 by jcesar-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 #include <pthread.h>
 #include <stdlib.h>
@@ -5,26 +17,25 @@
 int		take_forks(t_philo *philo);
 int		put_down_forks(t_philo *philo);
 
-int		take_forks(t_philo *philo)
+int	take_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
+	if (philo->id & 1)
 	{
-		if (pthread_mutex_lock(philo->left_fork) != 0)
-			return (EXIT_FAILURE);
-		print_state(philo, philo->id, "has taken a fork", DONT_UPDATE);
-		if (pthread_mutex_lock(philo->right_fork) != 0)
-			return (EXIT_FAILURE);
-		print_state(philo, philo->id, "has taken a fork", DONT_UPDATE);
+		first = philo->left_fork;
+		second = philo->right_fork;
 	}
 	else
 	{
-		if (pthread_mutex_lock(philo->right_fork) != 0)
-			return (EXIT_FAILURE);
-		print_state(philo, philo->id, "has taken a fork", DONT_UPDATE);
-		if (pthread_mutex_lock(philo->left_fork) != 0)
-			return (EXIT_FAILURE);
-		print_state(philo, philo->id, "has taken a fork", DONT_UPDATE);
+		first = philo->right_fork;
+		second = philo->left_fork;
 	}
+	pthread_mutex_lock(first);
+	safe_print(philo, get_timestamp(), "has taken a fork");
+	pthread_mutex_lock(second);
+	safe_print(philo, get_timestamp(), "has taken a fork");
 	return (EXIT_SUCCESS);
 }
 
@@ -43,15 +54,22 @@ int	put_down_forks(t_philo *philo)
 
 int	philo_eat(t_philo *philo)
 {
-	//if (philo->allowed_to_eat == FALSE)
-	//	return (EXIT_FAILURE);
-	if (philo->table->stop_meal == TRUE)
-		return (EXIT_FAILURE);
-	if (take_forks(philo) != 0)
-		return (EXIT_FAILURE);
-	print_state(philo, philo->id, "is eating", UPDATE_LAST_MEAL);
+	take_forks(philo);
+	pthread_mutex_lock(philo->table->state_lock);
+	philo->last_meal = get_timestamp();
+	philo->meals_count++;
+	pthread_mutex_unlock(philo->table->state_lock);
+	safe_print(philo, philo->last_meal, "is eating");
 	usleep(philo->table->rules.time_to_eat * 1000);
-	if (put_down_forks(philo) != 0)
-		return (EXIT_FAILURE);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 	return (EXIT_SUCCESS);
+}
+
+void	case_1_philo(t_philo *philo)
+{
+	safe_print(philo, get_timestamp(), "has taken a fork");
+	usleep(philo->table->rules.time_to_die * 1000);
+	safe_print(philo, get_timestamp(), "has died");
+	set_dead(philo->table);
 }

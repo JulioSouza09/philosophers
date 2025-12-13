@@ -6,7 +6,7 @@
 /*   By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 17:43:29 by jcesar-s          #+#    #+#             */
-/*   Updated: 2025/09/28 20:59:26 by jcesar-s         ###   ########.fr       */
+/*   Updated: 2025/12/13 15:57:36 by jcesar-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,25 +64,28 @@ typedef struct s_table
 	t_rules			rules;
 }	t_table;
 
-void	*ft_calloc(size_t nmemb, size_t size);
-int		ft_strlen(const char *str);
-int		ft_error(const char *message);
-int		ft_atoi_safe(const char *nptr, int *result);
-int		is_valid_number(char *str);
+void		*ft_calloc(size_t nmemb, size_t size);
+int			ft_strlen(const char *str);
+int			ft_error(const char *message);
+int			ft_atoi_safe(const char *nptr, int *result);
+int			is_valid_number(char *str);
 
-t_table	*create_table(int arg_count, char **argv);
-void	clean_table(t_table *table);
+t_table		*create_table(int arg_count, char **argv);
+void		clean_table(t_table *table);
 
-int		start_meal(t_table *table);
-int		finish_meal(pthread_t *threads, int size);
+int			start_meal(t_table *table);
+int			finish_meal(pthread_t *threads, int size);
 
-int		philo_eat(t_philo *philo);
-int		take_forks(t_philo *philo);
-int		put_down_forks(t_philo *philo);
-int		philo_sleep(t_philo *philo);
-int		philo_think(t_philo *philo);
-int		print_state(t_philo *philo, int philo_id, char *action, int update);
-long	get_timestamp(void);
+int			philo_eat(t_philo *philo);
+int			take_forks(t_philo *philo);
+int			put_down_forks(t_philo *philo);
+void		case_1_philo(t_philo *philo);
+
+int			safe_print(t_philo *philo, long timestamp, char *message);
+int			is_dead(t_table *table);
+void		set_dead(t_table *table);
+t_timestamp	get_val(t_table *table, t_timestamp *value);
+long		get_timestamp(void);
 
 /*
 void		ft_putstr_fd(char *str, int fd);

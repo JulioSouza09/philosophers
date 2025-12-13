@@ -6,13 +6,13 @@
 #    By: jcesar-s <jcesar-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/17 17:35:17 by jcesar-s          #+#    #+#              #
-#    Updated: 2025/09/28 15:08:06 by jcesar-s         ###   ########.fr        #
+#    Updated: 2025/12/13 16:25:13 by jcesar-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=thread
 IDIR = include/
 ODIR = obj/
 SDIR = src/
@@ -21,7 +21,6 @@ SRCFILES = main.c \
 		   create_table.c \
 		   start_meal.c \
 		   philo_eat.c \
-		   philo_sleep.c \
 		   meal_utils.c
 SRC = $(patsubst %, $(SDIR)%, $(SRCFILES))
 OBJ = $(patsubst %.c, $(ODIR)%.o, $(SRCFILES))
