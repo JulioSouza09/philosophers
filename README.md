@@ -131,24 +131,6 @@ make re
 
 ---
 
-## Project Structure
-
-```text
-philo/
-├── Makefile
-├── philo.h
-├── main.c
-├── init.c
-├── routine.c
-├── monitor.c
-├── time.c
-└── utils.c
-```
-
-*(Structure may vary, organized to separate initialization, routines, monitoring, and utilities.)*
-
----
-
 ## What This Project Demonstrates
 
 * Strong understanding of **multithreading**
